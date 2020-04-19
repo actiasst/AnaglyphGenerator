@@ -1,13 +1,20 @@
 package com.company;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        CanvasExample canvasExample = new CanvasExample();
         MinimumSpanningTree minimumSpanningTree = new MinimumSpanningTree();
-        minimumSpanningTree.example2();
+        BufferedImage image = ImageIO.read(new File("E://testImageAnaglyph.png"));
+        MyImage myImage = new MyImage(image);
+        myImage.createGrayScale();
+        myImage.printGrayScale();
     }
 }
 

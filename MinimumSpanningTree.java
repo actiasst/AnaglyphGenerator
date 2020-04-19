@@ -87,6 +87,10 @@ public class MinimumSpanningTree {
         return edgesChoose;
     }
 
+    void readFromFile(){
+
+    }
+
     void example1() {
         for (int i = 0; i < 8; i++)
             addNode();
