@@ -5,16 +5,46 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
-
+    public static long start;
+    public static long stop;
     public static void main(String[] args) throws IOException {
 //        CanvasExample canvasExample = new CanvasExample();
         MinimumSpanningTree minimumSpanningTree = new MinimumSpanningTree();
-        BufferedImage image = ImageIO.read(new File("E://testImageAnaglyph.png"));
+        BufferedImage image = ImageIO.read(new File("D://testImageAnaglyph3.png"));
         MyImage myImage = new MyImage(image);
+
+        timeStart();
         myImage.createGrayScale();
-        myImage.printGrayScale();
+        timeStop();
+        showTime();
+        myImage.createBlocks();
+        timeStop();
+        showTime();
+        myImage.createMST(10);
+        timeStop();
+        showTime();
+        myImage.createDepthImage();
+        timeStop();
+        showTime();
+    }
+
+    static long time(){
+        return System.currentTimeMillis();
+    }
+
+    static void timeStart(){
+        start = time();
+    }
+
+    static void timeStop(){
+        stop = time();
+    }
+
+    static void showTime(){
+        System.out.println("Time elapsed: " + (stop - start)/1000. + "s");
     }
 }
 

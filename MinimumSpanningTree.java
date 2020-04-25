@@ -49,40 +49,75 @@ public class MinimumSpanningTree {
         double min = 0;
         int index = 0;
         int counter = 0;
+        boolean flag = false;
         nodesUsed.add(0);
         for(int i = 0; i < nodesNeighbors.get(0).size(); i++)
             edgesAvailable.add(new Edge(0,nodesNeighbors.get(0).get(i)));
-        while(nodesUsed.size() != nodesNeighbors.size()){
+        while(nodesUsed.size() != nodesNeighbors.size()) {
+
+//            for(int i = 0; i < edgesAvailable.size(); i++){
+//                counter = 0;
+//                for(int j = 0; j < nodesUsed.size(); j++){
+//                    if(edgesAvailable.get(i).checkIfThereIsNode(nodesUsed.get(j)))
+//                        counter++;
+//                }
+//                if(counter == 2){
+//                    edgesAvailable.remove(i);
+//                    i--;
+//                }
+//            }
+
+
             index = 0;
             min = edgesValues.get(edgesAvailable.get(0).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(0).edgePoint1).indexOf(edgesAvailable.get(0).edgePoint2));
-            for(int i = 1; i < edgesAvailable.size(); i++)
-                if(edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2)) < min) {
+            for (int i = 1; i < edgesAvailable.size(); i++)
+                if (edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2)) < min) {
                     min = edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2));
                     index = i;
                 }
-            counter = 0;
-            for(int i = 0; i < nodesUsed.size(); i++){
-                if(edgesAvailable.get(index).checkIfThereIsNode(nodesUsed.get(i)))
-                    counter++;
-            }
-            if(counter == 2){
-                edgesAvailable.remove(index);
-                continue;
-            }
-            edgesChoose.add(new Edge(edgesAvailable.get(index).edgePoint1,edgesAvailable.get(index).edgePoint2));
+//            counter = 0;
+//            for(int i = 0; i < nodesUsed.size(); i++){
+//                if(edgesAvailable.get(index).checkIfThereIsNode(nodesUsed.get(i)))
+//                    counter++;
+//            }
+//            if(counter == 2){
+//                edgesAvailable.remove(index);
+//                continue;
+//            }
+            edgesChoose.add(new Edge(edgesAvailable.get(index).edgePoint1, edgesAvailable.get(index).edgePoint2));
             nodesUsed.add(edgesAvailable.get(index).edgePoint2);
-            for(int i = 0; i < nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).size(); i++){
-                if(nodesUsed.indexOf(nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)) == -1)
-                    edgesAvailable.add(new Edge(edgesAvailable.get(index).edgePoint2,nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)));
+            for (int i = 0; i < nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).size(); i++) {
+                if (nodesUsed.indexOf(nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)) == -1)
+                    edgesAvailable.add(new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)));
             }
             edgesAvailable.remove(index);
+
+            for (int i = 0; i < edgesAvailable.size(); i++) {
+                flag = false;
+                if (edgesAvailable.get(i).checkIfThereIsNode(nodesUsed.getLast())) {
+                    for (int j = 0; j < nodesNeighbors.get(nodesUsed.getLast()).size(); j++) {
+                        if(nodesUsed.indexOf(nodesNeighbors.get(nodesUsed.getLast()).get(j)) != -1) {
+                            if (edgesAvailable.get(i).checkIfThereIsNode(nodesNeighbors.get(nodesUsed.getLast()).get(j))) {
+                                edgesAvailable.remove(i);
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(flag)
+                    i--;
+            }
+            for(int i = 0; i < edgesAvailable.size(); i++)
+                edgesAvailable.get(i).printEdge();
+            System.out.println(nodesUsed.getLast());
         }
-        System.out.println("Edges picked:");
-        for(int i = 0; i < edgesChoose.size(); i++)
-            edgesChoose.get(i).printEdge();
-        System.out.println("Nodes picked order:");
-        for(int i = 0; i < nodesUsed.size(); i++)
-            System.out.println(nodesUsed.get(i));
+//        System.out.println("Edges picked:");
+//        for(int i = 0; i < edgesChoose.size(); i++)
+//            edgesChoose.get(i).printEdge();
+//        System.out.println("Nodes picked order:");
+//        for(int i = 0; i < nodesUsed.size(); i++)
+//            System.out.println(nodesUsed.get(i));
 
         return edgesChoose;
     }
