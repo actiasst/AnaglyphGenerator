@@ -46,49 +46,58 @@ public class MinimumSpanningTree {
     }
 
     LinkedList<Edge> MST(){
-        double min = 0;
+        //double min = 0;
+        double value = 0;
         int index = 0;
-        int counter = 0;
         boolean flag = false;
+        boolean addingFlag = false;
+
         nodesUsed.add(0);
-        for(int i = 0; i < nodesNeighbors.get(0).size(); i++)
-            edgesAvailable.add(new Edge(0,nodesNeighbors.get(0).get(i)));
-        while(nodesUsed.size() != nodesNeighbors.size()) {
-
-//            for(int i = 0; i < edgesAvailable.size(); i++){
-//                counter = 0;
-//                for(int j = 0; j < nodesUsed.size(); j++){
-//                    if(edgesAvailable.get(i).checkIfThereIsNode(nodesUsed.get(j)))
-//                        counter++;
-//                }
-//                if(counter == 2){
-//                    edgesAvailable.remove(i);
-//                    i--;
-//                }
-//            }
-
-
-            index = 0;
-            min = edgesValues.get(edgesAvailable.get(0).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(0).edgePoint1).indexOf(edgesAvailable.get(0).edgePoint2));
-            for (int i = 1; i < edgesAvailable.size(); i++)
-                if (edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2)) < min) {
-                    min = edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2));
-                    index = i;
+        edgesAvailable.add(new Edge(0,nodesNeighbors.get(0).get(0), edgesValues.get(0).get(0)));
+        for(int i = 1; i < nodesNeighbors.get(0).size(); i++) {
+            addingFlag = false;
+            for (int j = 0; j < edgesAvailable.size(); j++) {
+                if (edgesAvailable.get(j).value > edgesValues.get(0).get(i)) {
+                    edgesAvailable.add(j, new Edge(0, nodesNeighbors.get(0).get(i), edgesValues.get(0).get(i)));
+                    addingFlag = true;
+                    break;
                 }
-//            counter = 0;
-//            for(int i = 0; i < nodesUsed.size(); i++){
-//                if(edgesAvailable.get(index).checkIfThereIsNode(nodesUsed.get(i)))
-//                    counter++;
-//            }
-//            if(counter == 2){
-//                edgesAvailable.remove(index);
-//                continue;
-//            }
-            edgesChoose.add(new Edge(edgesAvailable.get(index).edgePoint1, edgesAvailable.get(index).edgePoint2));
+            }
+            if(!addingFlag){
+                edgesAvailable.addLast(new Edge(0, nodesNeighbors.get(0).get(i), edgesValues.get(0).get(i)));
+            }
+        }
+
+        while(nodesUsed.size() != nodesNeighbors.size()) {
+            index = 0;
+//            min = edgesValues.get(edgesAvailable.get(0).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(0).edgePoint1).indexOf(edgesAvailable.get(0).edgePoint2));
+//            for (int i = 1; i < edgesAvailable.size(); i++)
+//                if (edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2)) < min) {
+//                    min = edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2));
+//                    index = i;
+//                }
+
+
+            edgesChoose.add(new Edge(edgesAvailable.get(index).edgePoint1, edgesAvailable.get(index).edgePoint2,
+                    edgesValues.get(edgesAvailable.get(index).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(index).edgePoint1).indexOf(edgesAvailable.get(index).edgePoint2))));
             nodesUsed.add(edgesAvailable.get(index).edgePoint2);
+            //System.out.println(nodesUsed.size());
             for (int i = 0; i < nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).size(); i++) {
-                if (nodesUsed.indexOf(nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)) == -1)
-                    edgesAvailable.add(new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)));
+                if (nodesUsed.indexOf(nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)) == -1) {
+                    addingFlag = false;
+                    value = edgesValues.get(edgesAvailable.get(index).edgePoint2).get(i);
+                    //edgesAvailable.add(new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)));
+                    for(int j = 1; j < edgesAvailable.size(); j++) {
+                        if (edgesAvailable.get(j).value > value) {
+                            edgesAvailable.add(j, new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i), value));
+                            addingFlag = true;
+                            break;
+                        }
+                    }
+                    if(!addingFlag){
+                        edgesAvailable.addLast(new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i), value));
+                    }
+                }
             }
             edgesAvailable.remove(index);
 
@@ -108,22 +117,8 @@ public class MinimumSpanningTree {
                 if(flag)
                     i--;
             }
-            for(int i = 0; i < edgesAvailable.size(); i++)
-                edgesAvailable.get(i).printEdge();
-            System.out.println(nodesUsed.getLast());
         }
-//        System.out.println("Edges picked:");
-//        for(int i = 0; i < edgesChoose.size(); i++)
-//            edgesChoose.get(i).printEdge();
-//        System.out.println("Nodes picked order:");
-//        for(int i = 0; i < nodesUsed.size(); i++)
-//            System.out.println(nodesUsed.get(i));
-
         return edgesChoose;
-    }
-
-    void readFromFile(){
-
     }
 
     void example1() {
@@ -406,15 +401,17 @@ public class MinimumSpanningTree {
 class Edge{
     int edgePoint1;
     int edgePoint2;
+    double value;
 
     Edge(){
         this.edgePoint1 = 0;
         this.edgePoint2 = 0;
     }
 
-    Edge(int edgePoint1, int edgePoint2){
+    Edge(int edgePoint1, int edgePoint2, double value){
         this.edgePoint1 = edgePoint1;
         this.edgePoint2 = edgePoint2;
+        this.value = value;
     }
 
     boolean checkIfThereIsNode(int node){
@@ -427,5 +424,9 @@ class Edge{
 
     void printEdge(){
         System.out.println(edgePoint1 + " - " + edgePoint2);
+    }
+
+    void printEdgeValue(){
+        System.out.println(edgePoint1 + " - " + edgePoint2 + " : " + value);
     }
 }

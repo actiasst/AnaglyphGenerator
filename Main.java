@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -20,12 +21,15 @@ public class Main {
         myImage.createGrayScale();
         timeStop();
         showTime();
+        timeStart();
         myImage.createBlocks();
         timeStop();
         showTime();
+        timeStart();
         myImage.createMST(10);
         timeStop();
         showTime();
+        timeStart();
         myImage.createDepthImage();
         timeStop();
         showTime();

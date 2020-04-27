@@ -238,7 +238,21 @@ public class MyImage {
             }
 
         LinkedList<Edge> edges = minimumSpanningTree.MST();
-        System.out.println("");
+
+        LinkedList<LinkedList<Edge>> edgesByNode = new LinkedList<LinkedList<Edge>>();
+        for(int i = 0; i < minimumSpanningTree.nodesNeighbors.size(); i++){
+            edgesByNode.add(new LinkedList<Edge>());
+        }
+        for(int i = 0; i < edges.size(); i++){
+            edgesByNode.get(edges.get(i).edgePoint1).add(edges.get(i));
+        }
+//        for(int i = 0; i < edgesByNode.size(); i++) {
+//            System.out.println(i + ": ");
+//            for (int j = 0; j < edgesByNode.get(i).size(); j++) {
+//                edgesByNode.get(i).get(j).printEdge();
+//            }
+//        }
+
         int groupedBlocksCounter = 1;
         for (int i = 0; i < edges.size(); i++) {
             if (minimumSpanningTree.edgesValues.get(edges.get(i).edgePoint1).get(minimumSpanningTree.nodesNeighbors.get(edges.get(i).edgePoint1).indexOf(edges.get(i).edgePoint2)) > value) {
