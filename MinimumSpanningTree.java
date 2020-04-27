@@ -46,7 +46,6 @@ public class MinimumSpanningTree {
     }
 
     LinkedList<Edge> MST(){
-        //double min = 0;
         double value = 0;
         int index = 0;
         boolean flag = false;
@@ -70,23 +69,15 @@ public class MinimumSpanningTree {
 
         while(nodesUsed.size() != nodesNeighbors.size()) {
             index = 0;
-//            min = edgesValues.get(edgesAvailable.get(0).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(0).edgePoint1).indexOf(edgesAvailable.get(0).edgePoint2));
-//            for (int i = 1; i < edgesAvailable.size(); i++)
-//                if (edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2)) < min) {
-//                    min = edgesValues.get(edgesAvailable.get(i).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(i).edgePoint1).indexOf(edgesAvailable.get(i).edgePoint2));
-//                    index = i;
-//                }
-
 
             edgesChoose.add(new Edge(edgesAvailable.get(index).edgePoint1, edgesAvailable.get(index).edgePoint2,
                     edgesValues.get(edgesAvailable.get(index).edgePoint1).get(nodesNeighbors.get(edgesAvailable.get(index).edgePoint1).indexOf(edgesAvailable.get(index).edgePoint2))));
             nodesUsed.add(edgesAvailable.get(index).edgePoint2);
-            //System.out.println(nodesUsed.size());
+
             for (int i = 0; i < nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).size(); i++) {
                 if (nodesUsed.indexOf(nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)) == -1) {
                     addingFlag = false;
                     value = edgesValues.get(edgesAvailable.get(index).edgePoint2).get(i);
-                    //edgesAvailable.add(new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i)));
                     for(int j = 1; j < edgesAvailable.size(); j++) {
                         if (edgesAvailable.get(j).value > value) {
                             edgesAvailable.add(j, new Edge(edgesAvailable.get(index).edgePoint2, nodesNeighbors.get(edgesAvailable.get(index).edgePoint2).get(i), value));

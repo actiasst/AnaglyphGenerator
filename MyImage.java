@@ -238,6 +238,16 @@ public class MyImage {
             }
 
         LinkedList<Edge> edges = minimumSpanningTree.MST();
+        LinkedList<Integer> nodeEntries = new LinkedList<Integer>();
+        int groupedBlocksCounter = 1;
+        for (int i = 0; i < edges.size(); i++) {
+            if (minimumSpanningTree.edgesValues.get(edges.get(i).edgePoint1).get(minimumSpanningTree.nodesNeighbors.get(edges.get(i).edgePoint1).indexOf(edges.get(i).edgePoint2)) > value) {
+                nodeEntries.add(edges.get(i).edgePoint2);
+                edges.remove(i);
+                i--;
+                groupedBlocksCounter++;
+            }
+        }
 
         LinkedList<LinkedList<Edge>> edgesByNode = new LinkedList<LinkedList<Edge>>();
         for(int i = 0; i < minimumSpanningTree.nodesNeighbors.size(); i++){
@@ -245,21 +255,6 @@ public class MyImage {
         }
         for(int i = 0; i < edges.size(); i++){
             edgesByNode.get(edges.get(i).edgePoint1).add(edges.get(i));
-        }
-//        for(int i = 0; i < edgesByNode.size(); i++) {
-//            System.out.println(i + ": ");
-//            for (int j = 0; j < edgesByNode.get(i).size(); j++) {
-//                edgesByNode.get(i).get(j).printEdge();
-//            }
-//        }
-
-        int groupedBlocksCounter = 1;
-        for (int i = 0; i < edges.size(); i++) {
-            if (minimumSpanningTree.edgesValues.get(edges.get(i).edgePoint1).get(minimumSpanningTree.nodesNeighbors.get(edges.get(i).edgePoint1).indexOf(edges.get(i).edgePoint2)) > value) {
-                edges.remove(i);
-                i--;
-                groupedBlocksCounter++;
-            }
         }
 
         LinkedList<Integer> availableNodes = new LinkedList<Integer>();
@@ -275,28 +270,19 @@ public class MyImage {
         int node = stack.peek();
         boolean flag = false;
         int group = 0;
+        int index = 0;
 
         while (availableNodes.size() != 0) {
             flag = false;
-            for (int i = 0; i < edges.size(); i++) {
-                if (edges.get(i).checkIfThereIsNode(node)) {
-                    if (edges.get(i).edgePoint1 != node) {
-                        groupedBlocks.get(group).add(edges.get(i).edgePoint1);
-                        stack.push(edges.get(i).edgePoint1);
-                        availableNodes.remove(availableNodes.indexOf(edges.get(i).edgePoint1));
-                        edges.remove(i);
-                        flag = true;
-                        node = stack.peek();
-                        break;
-                    } else {
-                        groupedBlocks.get(group).add(edges.get(i).edgePoint2);
-                        stack.push(edges.get(i).edgePoint2);
-                        availableNodes.remove(availableNodes.indexOf(edges.get(i).edgePoint2));
-                        edges.remove(i);
-                        flag = true;
-                        node = stack.peek();
-                        break;
-                    }
+            for (int i = 0; i < edgesByNode.get(node).size(); i++) {
+                if(availableNodes.indexOf(edgesByNode.get(node).get(i).edgePoint2) != -1){
+                    index = edgesByNode.get(node).get(i).edgePoint2;
+                    groupedBlocks.get(group).add(index);
+                    stack.add(index);
+                    availableNodes.remove(availableNodes.indexOf(index));
+                    node = stack.peek();
+                    flag = true;
+                    break;
                 }
             }
             if (!flag) {
@@ -306,10 +292,11 @@ public class MyImage {
             }
             if (stack.isEmpty()) {
                 group++;
-                stack.add(availableNodes.get(0));
+                stack.add(nodeEntries.get(0));
                 groupedBlocks.get(group).add(stack.peek());
-                availableNodes.remove(0);
+                availableNodes.remove(availableNodes.indexOf(nodeEntries.get(0)));
                 node = stack.peek();
+                nodeEntries.remove(0);
             }
         }
     }

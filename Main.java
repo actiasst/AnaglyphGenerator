@@ -14,22 +14,19 @@ public class Main {
     public static void main(String[] args) throws IOException {
 //        CanvasExample canvasExample = new CanvasExample();
         MinimumSpanningTree minimumSpanningTree = new MinimumSpanningTree();
-        BufferedImage image = ImageIO.read(new File("D://testImageAnaglyph3.png"));
+        BufferedImage image = ImageIO.read(new File("D://testImageAnaglyph6.png"));
         MyImage myImage = new MyImage(image);
 
         timeStart();
         myImage.createGrayScale();
         timeStop();
         showTime();
-        timeStart();
         myImage.createBlocks();
         timeStop();
         showTime();
-        timeStart();
-        myImage.createMST(10);
+        myImage.createMST(5);
         timeStop();
         showTime();
-        timeStart();
         myImage.createDepthImage();
         timeStop();
         showTime();
